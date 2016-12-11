@@ -1,0 +1,100 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>Title</title>
+    <link rel="stylesheet" href="css/Main.css">
+</head>
+
+<body>
+    <div class="Carousel_slide" id="Carousel_Wrapper">
+        <div id="Carousel_Container">
+            <ul class="Carousel_ImageList">
+                <li>
+                    <a href="">
+                        <img class="Carousel_Image" src="./image/Image1.jpg">
+                    </a>
+                </li>
+                <li>
+                    <a href="">
+                        <img class="Carousel_Image" src="./image/Image2.jpg">
+                    </a>
+                </li>
+                <li>
+                    <a href="">
+                        <img class="Carousel_Image" src="./image/Image3.jpg">
+                    </a>
+                </li>
+            </ul>
+            <div class="Carousel_Background"></div>
+            <ul class="Carousel_InformationList">
+                <li class="Current_Info_Display">Image1</li>
+                <li>Image2</li>
+                <li>Image3</li>
+            </ul>
+            <ul class="Carousel_IndexList">
+                <li class="Current_Index_Display">1</li>
+                <li>2</li>
+                <li>3</li>
+            </ul>
+        </div>
+    </div>
+    <script type="text/javascript">
+        var Cur_Index = 0;
+        var ImgArr = document.getElementsByClassName("Carousel_ImageList")[0].getElementsByTagName("li"),
+            Img_List = ImgArr.length,
+            infoArr = document.getElementsByClassName("Carousel_InformationList")[0].getElementsByTagName("li"),
+            indexArr = document.getElementsByClassName("Carousel_IndexList")[0].getElementsByTagName("li");
+        function goLeft(Element, Distance){
+            if (Distance == 398){
+                Element.style.left = 0;
+            }
+            var toLeft, Current = parseInt(Element.style.left);
+            Distance += Current;
+            if (Distance < 0){
+                toLeft = false;
+                Distance = Math.abs(Distance);
+            }
+            else toLeft = true;
+            for (var i = 0; i <= Distance/19.9; i++){
+                (function(_i) {
+                    var pos = Current;
+                    setTimeout(function () {
+                        pos += (toLeft) ? -(_i * 19.9) : (_i * 19.9);
+                        Element.style.left = pos + "px";
+                    }, _i * 25);
+                })(i);
+            }
+        }
+        function Check_Class(Object, Cur_Class){
+            return Object.className.match(new RegExp('(\\s|^)'+Cur_Class+'(\\s|$)'));
+        }
+        function addClass(Object, Cur_Class){
+            if (!this.Check_Class(Object, Cur_Class)){
+                Object.className += Cur_Class;
+            }
+        }
+        function removeClass(Object, Cur_Class){
+            if (Check_Class(Object, Cur_Class)){
+                var reg = new RegExp('(\\s|^)'+Cur_Class+'(\\s|$)');
+                Object.className = Object.className.replace(reg, '');
+            }
+        }
+        function Switch_Image(Index){
+            var Now_Image = document.getElementsByClassName("Carousel_ImageList")[0];
+            goLeft(Now_Image, Index*398);
+            var Now_Info = document.getElementsByClassName("Current_Info_Display")[0];
+            removeClass(Now_Info, "Current_Info_Display");
+            addClass(infoArr[Index], "Current_Info_Display");
+            var Now_Index = document.getElementsByClassName("Current_Index_Display")[0];
+            removeClass(Now_Index, "Current_Index_Display");
+            addClass(indexArr[Index], "Current_Index_Display");
+        }
+        function Change_Image(){
+            if (Cur_Index<Img_List-1) Cur_Index++; else Cur_Index=0;
+            Switch_Image(Cur_Index);
+        }
+        var AutoChange=setInterval("Change_Image()", 2500);
+    </script>
+</body>
+</html>
